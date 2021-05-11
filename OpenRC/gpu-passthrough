@@ -1,0 +1,35 @@
+#!/sbin/openrc-run
+
+
+description="Change owner and permissions for /dev/vfio directory. Also bind vfio-pci for GPU. Need for QEMU/KVM GPU Passthrought."
+
+
+start() {
+
+	hostgr="0000:02:00.0"
+	hostau="0000:02:00.1"
+	grid="10de 1380"
+	auid="10de 0fbc"
+
+	# echo $grid > "/sys/bus/pci/drivers/vfio-pci/new_id"         # FIXME: Check this file
+	echo $hostgr > "/sys/bus/pci/devices/$hostgr/driver/unbind"
+	echo $hostgr > "/sys/bus/pci/drivers/vfio-pci/bind"
+
+	# echo $auid > "/sys/bus/pci/drivers/vfio-pci/new_id"         # FIXME: Check this file
+	echo $hostau > "/sys/bus/pci/devices/$hostau/driver/unbind"
+	echo $hostau > "/sys/bus/pci/drivers/vfio-pci/bind"
+
+	chown -h root:kvm /dev/vfio/13
+	chown -h root:kvm /dev/vfio/14
+	chmod 660 /dev/vfio/13
+	chmod 660 /dev/vfio/14
+
+}
+
+
+stop() {
+       chown -h root:root /dev/vfio/13
+       chown -h root:root /dev/vfio/14
+       chmod 600 /dev/vfio/13
+       chmod 600 /dev/vfio/14
+}
