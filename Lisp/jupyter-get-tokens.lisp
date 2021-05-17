@@ -8,6 +8,7 @@
 (defvar *arg-2* "list")
 
 
+;; TODO: To func this block:
 (let ((str (make-array '(0) :element-type 'base-char
 			    :fill-pointer 0 :adjustable t)))
 
@@ -16,13 +17,21 @@
 			    *arg-1*
 			    *arg-2*) :output stream))
 
-  ;; TODO: Implement search and display of all running servers
-  (cond ((search "http://localhost:8888/?token=" str)
-	 (format t "~%~30@{-~}~%  ~a~%~30@{-~}~%~a ~a~%~a ~a~%~%"
-		 (subseq str 0 26)
-		 "[ POINT ]:"
-		 (subseq str 27 48)
-		 "[ TOKEN ]:"
-		 (subseq str 56 104)))
+  (labels ((test (start)
+	     (let* ((title (subseq str start (+ start 26)))
+		    (point (subseq str (+ start 27) (+ start 48)))
+		    (token (subseq str (+ start 56) (+ start 104))))
 
-	((format t "~%~%[ ERROR ]: No server running!~%~%"))))
+	       (cond ((search "http://" (subseq str start))
+		      ;; TODO: Go title to up:
+		      (format t "~%~30@{-~}~%  ~a~%~30@{-~}~%~a ~a~%~a ~a~%~%"
+			      title
+			      "[ POINT ]:" point
+			      "[ TOKEN ]:" token)
+		      ;; TODO: Recursion realisation:
+		      (cond ((search "http://" (subseq str (+ start 27)))
+			     (print (subseq str (+ start 27))))))
+
+		     ((format t "~%~%[ ERROR ]: No server running!~%~%"))))))
+
+    (test 0)))
