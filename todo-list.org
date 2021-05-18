@@ -1,5 +1,6 @@
 * Tasks
-** TODO Common Lisp script -- Juputer server list :script:cl:jupyter:lab:server:list:
+** DONE Common Lisp script -- Juputer server list :script:cl:jupyter:lab:server:list:
+   CLOSED: [2021-05-18 Вт 20:12]
    :PROPERTIES:
    :Created:  <2021-05-12 Ср 03:51>
    :Source:   [[file:~/SciBourne/package-scripts/Lisp/jupyter-get-tokens.lisp::;; TODO: Implement search and display of all running servers]]
