@@ -8,30 +8,43 @@
 (defvar *arg-2* "list")
 
 
-;; TODO: To func this block:
-(let ((str (make-array '(0) :element-type 'base-char
-			    :fill-pointer 0 :adjustable t)))
+(defun get-jupyter-tokens ()
+  (let ((str (make-array '(0) :element-type 'base-char
+			      :fill-pointer 0 :adjustable t)))
 
-  (with-output-to-string (stream str)
-    (uiop:run-program (list (concatenate 'string *path* *name*)
-			    *arg-1*
-			    *arg-2*) :output stream))
+    (with-output-to-string (stream str)
+      (uiop:run-program (list (concatenate 'string *path* *name*)
+			      *arg-1*
+			      *arg-2*) :output stream))
 
-  (labels ((test (start)
-	     (let* ((title (subseq str start (+ start 26)))
-		    (point (subseq str (+ start 27) (+ start 48)))
-		    (token (subseq str (+ start 56) (+ start 104))))
+    (format t "~%~30@{-~}~%  ~a~%~30@{-~}~%~a" (subseq str 0 26) "")
 
-	       (cond ((search "http://" (subseq str start))
-		      ;; TODO: Go title to up:
-		      (format t "~%~30@{-~}~%  ~a~%~30@{-~}~%~a ~a~%~a ~a~%~%"
-			      title
-			      "[ POINT ]:" point
-			      "[ TOKEN ]:" token)
-		      ;; TODO: Recursion realisation:
-		      (cond ((search "http://" (subseq str (+ start 27)))
-			     (print (subseq str (+ start 27))))))
+    (labels ((print-token (start)
+	       (let* ((point (subseq str (+ start 27) (+ start 48)))
+		      (token (subseq str (+ start 56) (+ start 104)))
+		      (next  (search "http://" (subseq str (+ start 104))))
 
-		     ((format t "~%~%[ ERROR ]: No server running!~%~%"))))))
+		      (dir (cond (next
 
-    (test 0)))
+				  (subseq str
+					  (+ start 104)
+					  (+ start 104 (- next 1))))
+
+				 ((subseq str
+					  (+ start 104)
+					  (- (length str) 1))))))
+
+		 (cond ((search "http://" (subseq str start))
+			(format t "~%~a ~a~a~%~a ~a~%~%"
+				"[ POINT ]:" point dir
+				"[ TOKEN ]:" token)
+
+			(when next
+			  (print-token (+ start next 77))))
+
+		       ((format t "~%~%[ ERROR ]: No server running!~%~%"))))))
+
+      (print-token 0))))
+
+
+(get-jupyter-tokens)
