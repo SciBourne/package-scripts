@@ -1,0 +1,49 @@
+#!/bin/sh
+
+
+KEY=$1
+VAL=$2
+
+
+error_key() {
+    echo " [ ERROR ]: Unknown parameter"
+}
+
+
+error_value() {
+    echo " [ ERROR ]: Unknown parameter value"
+}
+
+
+change_os_release() {
+    local FILE_PATH="/usr/lib/os-release"
+
+    if [ -f $FILE_PATH ]
+    then
+        case $VAL in
+            on)
+                sed -i 's/ID=gentoo/ID=arch/' $FILE_PATH
+                echo " [ ON ] Screen sharing enabled"
+                ;;
+            off)
+                sed -i 's/ID=arch/ID=gentoo/' $FILE_PATH
+                echo " [ OFF ] Screen sharing disabled"
+                ;;
+            *)
+                error_value
+                ;;
+        esac
+    else
+        echo " [ ERROR ]: File $FILE_PATH does not exist"
+    fi
+}
+
+
+case $KEY in
+    --screen-share)
+        change_os_release
+        ;;
+    *)
+        error_key
+        ;;
+esac
