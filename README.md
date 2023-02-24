@@ -1,2 +1,4 @@
-# package-scripts
-Some home-usage scripts
+# Set of scripts for myself
+
+---
+Just a small set of scripts, nothing more...

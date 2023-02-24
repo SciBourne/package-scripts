@@ -11,11 +11,11 @@ start() {
 	grid="10de 1380"
 	auid="10de 0fbc"
 
-	# echo $grid > "/sys/bus/pci/drivers/vfio-pci/new_id"         # FIXME: Check this file
+        echo $grid > "/sys/bus/pci/drivers/vfio-pci/new_id"
 	echo $hostgr > "/sys/bus/pci/devices/$hostgr/driver/unbind"
 	echo $hostgr > "/sys/bus/pci/drivers/vfio-pci/bind"
 
-	# echo $auid > "/sys/bus/pci/drivers/vfio-pci/new_id"         # FIXME: Check this file
+        echo $auid > "/sys/bus/pci/drivers/vfio-pci/new_id"
 	echo $hostau > "/sys/bus/pci/devices/$hostau/driver/unbind"
 	echo $hostau > "/sys/bus/pci/drivers/vfio-pci/bind"
 
